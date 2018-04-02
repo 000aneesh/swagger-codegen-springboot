@@ -29,7 +29,7 @@ public class Application {
 	public Docket propertyServiceApi() {
 		// formatter:off
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(propertyServiceInfo()).select()
-				.apis(RequestHandlerSelectors.basePackage("com.cts.swagger.generator.controller")).paths(PathSelectors.any()).build()
+				.apis(RequestHandlerSelectors.basePackage("com.swagger.generator.controller")).paths(PathSelectors.any()).build()
 				.pathMapping("/");
 		// formatter:on
 	}
@@ -40,7 +40,7 @@ public class Application {
 	 * @return apiInfo
 	 */
 	private ApiInfo propertyServiceInfo() {
-		return new ApiInfoBuilder().title("Service API").description("Creates Project using Codegen")
+		return new ApiInfoBuilder().title("Swagger Code Generator API").description("Creates Project using Codegen")
 				.version("1.0").build();
 	}
 }

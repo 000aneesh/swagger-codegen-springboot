@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.swagger.generator.model.RequestObject;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.codegen.SwaggerCodegen;
 
 @RestController
 @RequestMapping("/generateCode")
@@ -28,12 +30,6 @@ public class CodeGenController {
 					"swagger-yaml", "swift", "tizen", "typescript-angular2", "typescript-angular", "typescript-node",
 					"typescript-fetch", "akka-scala", "CsharpDotNet2", "clojure", "haskell", "lumen", "go-server" }));
 
-	/**
-	 * 
-	 *
-	 * @return
-	 * @throws Exception
-	 */
 	@ApiOperation(value = "Create projects using swagger codegen cli")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 500, message = "Server error") })
@@ -41,19 +37,28 @@ public class CodeGenController {
 	public void generateCode(@RequestBody RequestObject reqObj) throws Exception {
 
 		String server = reqObj.getServer();
+		if (!isValidRequest(reqObj)) {
+			throw new Exception("Request json is not valid.");
+		}
 		if (SERVERS.contains(server)) {
-			String jsonFile = "\"" + reqObj.getJsonFilePath() + "/" + reqObj.getJsonFileName() + "\""; // "D:/aneesh/swagger-poc/student.json";
-			String destPath = "\"" + reqObj.getDestinationPath() + "/" + reqObj.getProjectName() + "\"";
-			String cmd = "java -jar D:/aneesh/swagger-poc/swagger-codegen-cli-jar/swagger-codegen-cli-2.2.1.jar generate -i "
-					+ jsonFile + " -l " + server + " -o " + destPath;
-			Runtime.getRuntime().exec(cmd);
-			// Runtime.getRuntime().exec("java -jar swagger-codegen-cli-2.2.1.jar generate
-			// -i D:/aneesh/swagger-poc/student.json -l spring -o
-			// D:/aneesh/swagger-poc/swagger-codegen-cli-jar/projectfiles/spring");
+			String jsonFile = reqObj.getJsonFilePath() + "/" + reqObj.getJsonFileName(); // "D:/aneesh/swagger-poc/student.json";
+			String destPath = reqObj.getDestinationPath() + "/" + reqObj.getProjectName();
+			String[] args = new String[] { "generate", "-i", jsonFile, "-l", server, "-o", destPath };
+			SwaggerCodegen.main(args);
 		} else {
 			throw new Exception(server + " is not available");
 		}
 
+	}
+
+	private boolean isValidRequest(RequestObject reqObj) {
+		boolean isValid = false;
+		if (reqObj != null && StringUtils.isNotBlank(reqObj.getDestinationPath())
+				&& StringUtils.isNotBlank(reqObj.getJsonFileName()) && StringUtils.isNotBlank(reqObj.getJsonFilePath())
+				&& StringUtils.isNotBlank(reqObj.getProjectName()) && StringUtils.isNotBlank(reqObj.getServer())) {
+			isValid = true;
+		}
+		return isValid;
 	}
 
 }
