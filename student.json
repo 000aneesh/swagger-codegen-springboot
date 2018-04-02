@@ -1,0 +1,129 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Service manages students information",
+    "version": "1.0",
+    "title": "Service API"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "app-controller",
+      "description": "App Controller"
+    }
+  ],
+  "paths": {
+    "/students": {
+      "get": {
+        "tags": [
+          "app-controller"
+        ],
+        "summary": "Retrieving all the students",
+        "operationId": "findAllStudentsUsingGET",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/StudentDTO"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "app-controller"
+        ],
+        "summary": "Create Student",
+        "operationId": "createStudentUsingPOST",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "studentDTO",
+            "description": "studentDTO",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StudentDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/StudentDTO"
+            }
+          },
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/StudentDTO"
+            }
+          },
+          "400": {
+            "description": "Input message validation failed"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "StudentDTO": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "batch": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
