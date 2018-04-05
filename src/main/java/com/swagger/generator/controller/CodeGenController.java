@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.swagger.generator.model.RequestObject;
+import com.swagger.generator.model.CodeGenObject;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -34,9 +34,9 @@ public class CodeGenController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
 			@ApiResponse(code = 500, message = "Server error") })
 	@PostMapping
-	public void generateCode(@RequestBody RequestObject reqObj) throws Exception {
+	public void generateCode(@RequestBody CodeGenObject reqObj) throws Exception {
 
-		String server = reqObj.getServer();
+		String server = "spring";//reqObj.getServer();
 		if (!isValidRequest(reqObj)) {
 			throw new Exception("Request json is not valid.");
 		}
@@ -51,11 +51,11 @@ public class CodeGenController {
 
 	}
 
-	private boolean isValidRequest(RequestObject reqObj) {
+	private boolean isValidRequest(CodeGenObject reqObj) {
 		boolean isValid = false;
 		if (reqObj != null && StringUtils.isNotBlank(reqObj.getDestinationPath())
 				&& StringUtils.isNotBlank(reqObj.getJsonFileName()) && StringUtils.isNotBlank(reqObj.getJsonFilePath())
-				&& StringUtils.isNotBlank(reqObj.getProjectName()) && StringUtils.isNotBlank(reqObj.getServer())) {
+				&& StringUtils.isNotBlank(reqObj.getProjectName())) {
 			isValid = true;
 		}
 		return isValid;
